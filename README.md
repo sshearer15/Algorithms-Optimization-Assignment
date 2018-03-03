@@ -26,8 +26,11 @@ optim(par=c(0,0.25), fn=min.reg, x=xxx, y=yyy_probs)
 #change initial paraments to see if effects “B0” and “B1” values 
 
 optim(par=c(-1,-0.5), fn=min.reg, x=xxx, y=yyy_probs)
+
 optim(par=c(0,0.5), fn=min.reg, x=xxx, y=yyy_probs)
+
 optim(par=c(0,0.25), fn=min.reg, x=xxx, y=yyy_probs)
+
 optim(par=c(0.5, 1), fn=min.reg, x=xxx, y=yyy_probs)
 
 
