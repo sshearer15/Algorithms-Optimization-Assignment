@@ -1,5 +1,7 @@
 # Algorithms-Optimization-Assignment
 
+###Part One
+
 library("ggplot2")
 set.seed(123)
 error_term <- rnorm(201)
@@ -38,3 +40,45 @@ optim(par=c(0.5, 1), fn=min.reg, x=xxx, y=yyy_probs)
 #wow! different values!
 
 lm1 <- lm(yyy_probs~xxx)
+
+
+###Part Two
+
+library("Matching")
+library("rgenoud")
+library("ggplot2")
+data(lalonde)
+
+#minimize the sum of the squared residuals 
+min.reg <- function(params){
+  B0 <- params[1]
+  B1 <- params[2]
+  mycost <- sum( (lalonde$re78 - (B0 + B1*lalonde$treat))^2 )
+  return (mycost)
+}
+
+#tested other starting values besides that chosen below; outcome not sensitive to change
+
+myfit <- genoud(min.reg,nvars = 2, starting.values = c(2000, 2000))
+cat('Using genoud - B0:', myfit$par[1], ' B1:', myfit$par[2], '\n')
+
+#compare v. simple regression: yields same parameters!
+
+mylm <- lm(re78~treat, data = lalonde)
+cat('Using lm - B0:', mylm$coefficients[1], ' B1:', mylm$coefficients[2], '\n')
+
+
+#median squared residual/robust residual regression
+
+min.reg2 <- function(params){
+  B0 <- params[1]
+  B1 <- params[2]
+  mycost <- median( (lalonde$re78 - (B0 + B1*lalonde$treat))^2 )
+  return (mycost)
+}
+
+#this is sensitive to starting values; by leaving start value argument undefined in genound, 
+## the function picks random values and yeilds a different solution each time!
+
+myfit2 <- genoud(min.reg2,nvars = 2)
+cat('Using genoud for robust - B0:', myfit2$par[1], ' B1:', myfit2$par[2], '\n')
